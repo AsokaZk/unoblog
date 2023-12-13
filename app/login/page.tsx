@@ -6,7 +6,7 @@ import styles from "./loginPage.module.css";
 
 const LoginPage = () => {
   const router = useRouter();
-  const { status } = useSession()
+  const { status } = useSession();
 
   if (status === "authenticated") {
     router.push("/");

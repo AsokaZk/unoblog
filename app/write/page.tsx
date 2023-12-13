@@ -6,9 +6,17 @@ import { useSession } from "next-auth/react";
 import ReactQuill from "react-quill";
 import { type Category } from "@prisma/client";
 import { getCategories, uploadToCloudinary } from "@/lib/data";
+import { useForm } from "react-hook-form"
 
 import styles from "./writePage.module.css";
 import "react-quill/dist/quill.bubble.css";
+import Placeholder from "./placeholder";
+
+type FormValues = {
+  title: string
+  description: string
+  url: string
+}
 
 const WritePage = () => {
   const { status } = useSession();
@@ -16,13 +24,14 @@ const WritePage = () => {
 
   const ref = useRef<any>();
 
+  const { register, handleSubmit } = useForm<FormValues>({ shouldUseNativeValidation: true })
+
   const [categoryList, setCategoryList] = useState<Category[]>([]);
 
   const [file, setFile] = useState<File | null | undefined>(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
 
-  const [title, setTitle] = useState("");
-  const [value, setValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [catSlug, setCatSlug] = useState("");
 
   useEffect(() => {
@@ -44,14 +53,16 @@ const WritePage = () => {
       .replace(/[\s_-]+/g, "-")
       .replace(/^-+|-+$/g, "");
 
-  const handleSubmit = async () => {
+  const onSubmit = handleSubmit(async (data) => {
+    setIsLoading(true);
+    await uploadFileCloud();
     const res = await fetch("/api/posts", {
       method: "POST",
       body: JSON.stringify({
-        title,
-        desc: value,
+        title: data.title,
+        desc: data.description,
         img: imagePreviewUrl,
-        slug: slugify(title),
+        slug: slugify(data.title),
         catSlug: catSlug || "style", //If not selected, choose the general category
       }),
     });
@@ -60,20 +71,16 @@ const WritePage = () => {
       const data = await res.json();
       router.push(`/posts/${data.slug}`);
     }
-  };
+    setIsLoading(false);
+  });
 
   useEffect(() => {
-    let isActive = true;
-
     const uploadFile = async () => {
-      if (file) {
+      if (file && !isLoading) {
         try {
-          const url = await uploadToCloudinary(file);
+          const url = URL.createObjectURL(file);
           if (url) {
             setImagePreviewUrl(url);
-          }
-          if (isActive) {
-            setFile(null);
           }
         } catch (error) {
           console.error('Error uploading file:', error);
@@ -83,10 +90,18 @@ const WritePage = () => {
 
     void uploadFile();
 
-    return () => {
-      isActive = false;
-    };
   }, [file]);
+
+  const uploadFileCloud = async () => {
+    if (file) {
+      try {
+        const url = await uploadToCloudinary(file);
+        setImagePreviewUrl(url);
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
+    }
+  };
 
   const uploadFile = () => {
     ref.current?.click();
@@ -94,71 +109,73 @@ const WritePage = () => {
 
   return (
     <div className={styles.container}>
+      {isLoading ? (
+        <Placeholder />
+      ) : (
+        <form onSubmit={onSubmit}>
+          <div className={styles.header}>
+            <input
+              {...register("title", { required: "Please enter title." })}
+              placeholder="Title"
+              className={styles.input}
+            />
 
-      <div className={styles.header}>
-        <input
-          type="text"
-          placeholder="Title"
-          className={styles.input}
-          onChange={(e) => setTitle(e.target.value)}
-        />
+            <div className={styles.options}>
+              <select className={styles.select} onChange={(e) => setCatSlug(e.target.value)} >
+                <option value="">Category</option>
+                {categoryList.map((item) => (
+                  <option value={item.slug} key={item.id}>{item.title}</option>
+                ))}
+              </select>
 
-        <div className={styles.options}>
-          <select className={styles.select} onChange={(e) => setCatSlug(e.target.value)} >
-            <option value="">Category</option>
-            {categoryList.map((item) => (
-              <option value={item.slug} key={item.id}>{item.title}</option>
-            ))}
-          </select>
+              <button className={styles.publish} type="submit" disabled={isLoading}>
+                Publish
+              </button>
+            </div>
+          </div>
 
-          <button className={styles.publish} onClick={handleSubmit}>
-            Publish
-          </button>
-        </div>
-      </div>
+          <div className={styles.uploadImageContainer}>
+            <input
+              ref={ref}
+              id="image"
+              type="file"
+              accept="image/*"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const file = e.target.files ? e.target.files[0] : null;
+                setFile(file);
+              }}
+              style={{ display: "none" }}
+            />
+            {imagePreviewUrl ? (
+              <Image
+                src={imagePreviewUrl}
+                alt="Uploaded Image"
+                width={1200}
+                height={700}
+                onClick={uploadFile}
+                className={styles.imagePreview}
+              />
+            ) : (
+              <Image
+                src="/upload.svg"
+                alt="Upload Image"
+                width={1200}
+                height={700}
+                onClick={uploadFile}
+                className={styles.uploadImageSvg}
+              />
+            )}
+          </div>
 
-      <div className={styles.uploadImageContainer}>
-        <input
-          ref={ref}
-          id="image"
-          type="file"
-          accept="image/*"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            const file = e.target.files ? e.target.files[0] : null;
-            setFile(file);
-          }}
-          style={{ display: "none" }}
-        />
-        {imagePreviewUrl ? (
-          <Image
-            src={imagePreviewUrl}
-            alt="Uploaded Image"
-            width={1200}
-            height={700}
-            onClick={uploadFile}
-            className={styles.imagePreview}
-          />
-        ) : (
-          <Image
-            src="/upload.svg"
-            alt="Upload Image"
-            width={1200}
-            height={700}
-            onClick={uploadFile}
-            className={styles.uploadImageSvg}
-          />
-        )}
-      </div>
-
-      <div className={styles.editor}>
-        <ReactQuill
-          className={styles.textArea}
-          theme="bubble"
-          value={value}
-          onChange={setValue}
-          placeholder="Write here..."
-        />
-      </div>
+          <div className={styles.editor}>
+            <input
+              {...register("description")}
+              className={styles.textArea}
+              placeholder="Write here..."
+            />
+          </div>
+        </form>
+      )}
     </div>
   );
 };
