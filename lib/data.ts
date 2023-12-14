@@ -1,5 +1,6 @@
 import { Category, Post, User } from "@prisma/client";
 import { PaginatedPostsResponse } from "./definitions";
+import next from "next";
 
 export const getCategories = async (): Promise<Category[]> => {
   try {
@@ -9,14 +10,26 @@ export const getCategories = async (): Promise<Category[]> => {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch");
+      Promise.resolve()
+        .then(() => {
+          throw new Error("Failed to fetch");
+        })
+        .catch((err) => {
+          next(err);
+        });
     }
 
     const responseData = await response.json();
 
     return responseData;
   } catch (err) {
-    throw new Error("Failed to upload");
+    Promise.resolve()
+      .then(() => {
+        throw new Error("Failed to upload");
+      })
+      .catch((err) => {
+        next(err);
+      });
   }
 };
 
@@ -34,14 +47,26 @@ export const getSinglePost = async (
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch");
+      Promise.resolve()
+        .then(() => {
+          throw new Error("Failed to fetch");
+        })
+        .catch((err) => {
+          next(err);
+        });
     }
 
     const responseData = await response.json();
 
     return responseData;
   } catch (error) {
-    throw new Error("Failed to fetch");
+    Promise.resolve()
+      .then(() => {
+        throw new Error("Failed to fetch");
+      })
+      .catch((err) => {
+        next(err);
+      });
   }
 };
 
@@ -65,14 +90,26 @@ export const getPosts = async ({
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch");
+      Promise.resolve()
+        .then(() => {
+          throw new Error("Failed to fetch");
+        })
+        .catch((err) => {
+          next(err);
+        });
     }
 
     const responseData = await response.json();
     return responseData;
   } catch (error) {
     console.log(error);
-    throw new Error("Failed to fetch");
+    Promise.resolve()
+      .then(() => {
+        throw new Error("Failed to fetch");
+      })
+      .catch((err) => {
+        next(err);
+      });
   }
 };
 
@@ -91,6 +128,12 @@ export const uploadToCloudinary = async (
     const data = await response.json();
     return data.url;
   } catch (error) {
-    throw new Error("Failed to upload");
+    Promise.resolve()
+      .then(() => {
+        throw new Error("Failed to upload");
+      })
+      .catch((err) => {
+        next(err);
+      });
   }
 };

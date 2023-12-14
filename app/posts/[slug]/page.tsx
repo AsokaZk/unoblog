@@ -136,7 +136,7 @@ const SinglePage = ({ params: { slug } }: SinglePageProps) => {
                       <p className={styles.date}>{moment(comment.createdAt).fromNow()}</p>
                     </div>
                   </div>
-                  <p>{comment.desc}</p>
+                  <p className="ml-10 mt-2">{comment.desc}</p>
                 </li>
               ))}
           </ul>

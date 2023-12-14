@@ -27,19 +27,6 @@ const Footer = async () => {
                     <Link href="/contact">Contact</Link>
                 </div>
                 <div className={styles.list}>
-                    <span className={styles.listTitle}>Categories</span>
-                    {
-                        categories.map((category) => (
-                            <Link
-                                href={`/blog?cat=${category.slug}&page=1&limit=4`}
-                                key={category.id}
-                            >
-                                {category.title}
-                            </Link>
-                        ))
-                    }
-                </div>
-                <div className={styles.list}>
                     <span className={styles.listTitle}>Social</span>
                     <Link href="/">Facebook</Link>
                     <Link href="/">Instagram</Link>
