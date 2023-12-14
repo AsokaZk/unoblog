@@ -7,7 +7,7 @@ import styles from './Featured.module.css'
 const Featured = () => {
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>
+            <h1 className={`${styles.title} uppercase text-center`}>
                 <b className={styles.title2}>Hello there!</b> Discover the latest anime news
             </h1>
             <div className={styles.post}>
