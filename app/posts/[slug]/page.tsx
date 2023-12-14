@@ -3,7 +3,6 @@ import Image from "next/image";
 import styles from "./SinglePage.module.css";
 import Menu from "@/app/components/menu/Menu";
 import { getSinglePost } from "@/lib/data";
-import { useSession } from "next-auth/react";
 
 interface SinglePageProps {
   params: {
@@ -13,6 +12,8 @@ interface SinglePageProps {
 
 const SinglePage = async ({ params: { slug } }: SinglePageProps) => {
   const post = await getSinglePost(slug);
+
+  //const { status } = useSession();
 
   return (
     <div className={styles.container}>
@@ -49,6 +50,9 @@ const SinglePage = async ({ params: { slug } }: SinglePageProps) => {
             className={styles.description}
             dangerouslySetInnerHTML={{ __html: post?.desc ?? '' }}
           />
+        </div>
+        <div className={styles.comments}>
+          <h5>Comments</h5>
         </div>
         <Menu />
       </div>

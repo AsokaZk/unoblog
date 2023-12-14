@@ -25,7 +25,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <AuthProvider>
           <ThemeContextProvider>
-            <div className="container">
+            <div className="container-base">
               <div className="wrapper">
                 <Navbar />
                 {children}

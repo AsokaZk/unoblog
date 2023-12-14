@@ -55,15 +55,15 @@ const WritePage = () => {
 
   const onSubmit = handleSubmit(async (data) => {
     setIsLoading(true);
-    await uploadFileCloud();
+    const URL = await uploadFileCloud();
     const res = await fetch("/api/posts", {
       method: "POST",
       body: JSON.stringify({
         title: data.title,
         desc: data.description,
-        img: imagePreviewUrl,
+        img: URL,
         slug: slugify(data.title),
-        catSlug: catSlug || "style", //If not selected, choose the general category
+        catSlug: catSlug || "no-ficcion", //If not selected, choose the general category
       }),
     });
 
@@ -95,8 +95,7 @@ const WritePage = () => {
   const uploadFileCloud = async () => {
     if (file) {
       try {
-        const url = await uploadToCloudinary(file);
-        setImagePreviewUrl(url);
+        return await uploadToCloudinary(file);
       } catch (error) {
         console.error('Error uploading file:', error);
       }

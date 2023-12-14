@@ -23,7 +23,7 @@ const AuthLinks = () => {
         <>
             {session ? (
                 <>
-                    <Link href="/write" className={styles.link}>Write</Link>
+                    <Link href="/upload" className={styles.link}>Upload</Link>
                     <span className={styles.link} onClick={handleLogout}>
                         Logout
                     </span>
@@ -46,7 +46,7 @@ const AuthLinks = () => {
 
                     {session ? (
                         <>
-                            <Link href="/write">Write</Link>
+                            <Link href="/upload">Upload</Link>
                             <span className={styles.mobileLink} onClick={handleLogout}>
                                 Logout
                             </span>

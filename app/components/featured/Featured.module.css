@@ -7,6 +7,12 @@
   font-weight: 300;
 }
 
+.title2 {
+  font-size: 6rem;
+  font-weight: 300;
+  color: rgba(35, 181, 181, 0.621);
+}
+
 .post {
   margin-top: 60px;
   display: flex;

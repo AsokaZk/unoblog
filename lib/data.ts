@@ -71,6 +71,7 @@ export const getPosts = async ({
     const responseData = await response.json();
     return responseData;
   } catch (error) {
+    console.log(error);
     throw new Error("Failed to fetch");
   }
 };

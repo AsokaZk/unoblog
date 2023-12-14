@@ -7,7 +7,7 @@ import styles from "./Card.module.css";
 const Card = ({ post }: { post: Post }) => {
   return (
     <div className={styles.container} key={post.id}>
-      {post.img && (
+      {post?.img && (
         <div className={styles.imageContainer}>
           <Image src={post.img} alt={post.title} fill className={styles.image} />
         </div>
