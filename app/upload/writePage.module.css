@@ -1,0 +1,90 @@
+.container {
+  /* position: relative; */
+  display: flex;
+  flex-direction: column;
+
+  /* gap: 20px; */
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.input {
+  font-size: 34px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: var(--textColor);
+  width: 90%;
+}
+
+.input::placeholder {
+  color: #b3b3b1;
+}
+
+.options {
+  display: flex;
+  gap: 20px;
+}
+
+.select {
+  padding: 10px 20px;
+  border-radius: 20px;
+  color: black;
+}
+
+.publish {
+  padding: 10px 20px;
+  border: none;
+  background-color: #1a8917;
+  color: white;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.uploadImageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  /* width: 80%; */
+  height: 50vh;
+  /* flex-direction: column; */
+  gap: 20px;
+}
+
+.editor {
+  height: 900px;
+  overflow-y: scroll;
+  margin: 20px 0px;
+}
+
+.textArea {
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: var(--textColor);
+}
+
+.imagePreview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.uploadImageSvg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1px dashed #b3b3b1;
+}

@@ -1,8 +1,8 @@
-import React from "react";
-import Image from "next/image";
-import Link from "next/link";
+import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-import styles from "./MenuPosts.module.css"
+import styles from './MenuPosts.module.css';
 
 interface MenuPostsProps {
   withImage: boolean;
@@ -11,7 +11,7 @@ interface MenuPostsProps {
 const MenuPosts = ({ withImage }: MenuPostsProps) => {
   return (
     <div className={styles.items}>
-      <Link href="/" className={styles.item}>
+      <Link href="/" className={`${styles.item} box`}>
         {withImage && (
           <div className={styles.imageContainer}>
             <Image src="/fashion.png" alt="" fill className={styles.image} />
@@ -28,16 +28,14 @@ const MenuPosts = ({ withImage }: MenuPostsProps) => {
           </div>
         </div>
       </Link>
-      <Link href="/" className={styles.item}>
+      <Link href="/" className={`${styles.item} box`}>
         {withImage && (
           <div className={styles.imageContainer}>
             <Image src="/fashion.png" alt="" fill className={styles.image} />
           </div>
         )}
         <div className={styles.textContainer}>
-          <span className={`${styles.category} ${styles.culture}`}>
-            Culture
-          </span>
+          <span className={`${styles.category} ${styles.culture}`}>Culture</span>
           <h3 className={styles.postTitle}>
             Lorem ipsum dolor sit amet consectetur adipisicing elit.
           </h3>
@@ -47,7 +45,7 @@ const MenuPosts = ({ withImage }: MenuPostsProps) => {
           </div>
         </div>
       </Link>
-      <Link href="/" className={styles.item}>
+      <Link href="/" className={`${styles.item} box`}>
         {withImage && (
           <div className={styles.imageContainer}>
             <Image src="/fashion.png" alt="" fill className={styles.image} />
@@ -64,16 +62,14 @@ const MenuPosts = ({ withImage }: MenuPostsProps) => {
           </div>
         </div>
       </Link>
-      <Link href="/" className={styles.item}>
+      <Link href="/" className={`${styles.item} box`}>
         {withImage && (
           <div className={styles.imageContainer}>
             <Image src="/fashion.png" alt="" fill className={styles.image} />
           </div>
         )}
         <div className={styles.textContainer}>
-          <span className={`${styles.category} ${styles.fashion}`}>
-            Fashion
-          </span>
+          <span className={`${styles.category} ${styles.fashion}`}>Fashion</span>
           <h3 className={styles.postTitle}>
             Lorem ipsum dolor sit amet consectetur adipisicing elit.
           </h3>

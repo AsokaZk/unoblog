@@ -1,24 +1,48 @@
-import { Category, PaginatedPostsResponse, Post } from "./definitions";
-import { posts, categories } from "@/lib/placeholder-data";
+import { Category, Post, User } from "@prisma/client";
+import { PaginatedPostsResponse } from "./definitions";
 
 export const getCategories = async (): Promise<Category[]> => {
-  return new Promise((resolve) => {
-    resolve(categories);
-  });
-};
+  try {
+    const response = await fetch("http://localhost:3000/api/categories", {
+      method: "GET",
+      cache: "no-cache",
+    });
 
-export const getSinglePost = async (slug: string): Promise<Post> => {
-  return new Promise((resolve, reject) => {
-    if (!slug) reject({ message: "Slug is required" });
-
-    const existingPost = posts.find((post) => post.slug === slug);
-
-    if (!existingPost) {
-      reject({ message: "Post not found" });
+    if (!response.ok) {
+      throw new Error("Failed to fetch");
     }
 
-    if (existingPost) resolve(existingPost);
-  });
+    const responseData = await response.json();
+
+    return responseData;
+  } catch (err) {
+    throw new Error("Failed to upload");
+  }
+};
+
+export interface ExtendedPost extends Post {
+  user: User;
+}
+
+export const getSinglePost = async (
+  slug: string
+): Promise<ExtendedPost | null> => {
+  try {
+    const response = await fetch(`http://localhost:3000/api/posts/${slug}`, {
+      method: "GET",
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch");
+    }
+
+    const responseData = await response.json();
+
+    return responseData;
+  } catch (error) {
+    throw new Error("Failed to fetch");
+  }
 };
 
 export const getPosts = async ({
@@ -30,25 +54,43 @@ export const getPosts = async ({
   page: number;
   limit: number;
 }): Promise<PaginatedPostsResponse> => {
-  const offset = page * limit - limit;
+  try {
+    const url = `http://localhost:3000/api/posts?page=${page}&limit=${limit}${
+      cat ? `&cat=${cat}` : ""
+    }`;
 
-  const filteredPosts: Post[] = !cat
-    ? posts
-    : posts.filter((post) => post.catSlug === cat);
-  const count = filteredPosts.length;
-  const filteredPostsSliced = filteredPosts.slice(offset, offset + limit);
-
-  return new Promise((resolve) => {
-    resolve({
-      posts: filteredPostsSliced,
-      pagination: {
-        totalPages: Math.ceil(count / limit),
-        currentPage: page,
-        offset,
-        limit,
-        hasPrev: page > 1,
-        hasNext: page < Math.ceil(count / limit),
-      },
+    const response = await fetch(url, {
+      method: "GET",
+      cache: "no-store",
     });
-  });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch");
+    }
+
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to fetch");
+  }
+};
+
+export const uploadToCloudinary = async (
+  file: string | Blob
+): Promise<string> => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const response = await fetch(`http://localhost:3000/api/upload`, {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+    return data.url;
+  } catch (error) {
+    throw new Error("Failed to upload");
+  }
 };

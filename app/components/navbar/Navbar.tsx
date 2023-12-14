@@ -9,7 +9,7 @@ import styles from './Navbar.module.css'
 const Navbar = () => {
     return (
         <div className={styles.container}>
-            <Link href="/" className={styles.logo}>unoBlog</Link>
+            <Link href="/" className={styles.logo}>AnimeBeat</Link>
 
             <div className={styles.menu}>
                 <Toggle />

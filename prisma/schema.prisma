@@ -10,6 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Necessary for Next auth
 model Account {
   id                String  @id @default(cuid()) @map("_id")
   userId            String
@@ -33,6 +34,7 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  role         String?
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -41,9 +43,12 @@ model User {
   name          String?
   email         String?   @unique
   emailVerified DateTime?
+  role          String?
   image         String?
   accounts      Account[]
   sessions      Session[]
+  posts         Post[]
+  Comment       Comment[]
 }
 
 model VerificationToken {
@@ -52,4 +57,38 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+// Blog models
+model Category {
+  id    String  @id @default(cuid()) @map("_id")
+  slug  String  @unique
+  title String
+  color String?
+  Posts Post[]
+}
+
+model Post {
+  id        String    @id @default(cuid()) @map("_id")
+  createdAt DateTime  @default(now())
+  slug      String    @unique
+  title     String
+  desc      String
+  img       String?
+  views     Int       @default(0)
+  catSlug   String
+  cat       Category  @relation(fields: [catSlug], references: [slug])
+  userEmail String
+  user      User      @relation(fields: [userEmail], references: [email])
+  comments  Comment[]
+}
+
+model Comment {
+  id        String   @id @default(cuid()) @map("_id")
+  createdAt DateTime @default(now())
+  desc      String
+  userEmail String
+  user      User     @relation(fields: [userEmail], references: [email])
+  postSlug  String
+  post      Post     @relation(fields: [postSlug], references: [slug])
 }

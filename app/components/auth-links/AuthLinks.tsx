@@ -4,11 +4,11 @@ import Link from 'next/link'
 import { signOut, useSession } from "next-auth/react";
 
 import styles from './AuthLinks.module.css'
+import Dropdown from '../dropdown/page';
 
 const AuthLinks = () => {
     const [open, setOpen] = useState(false)
     const { data: session } = useSession();
-
 
     const toggleMenu = () => {
         setOpen(!open)
@@ -23,10 +23,10 @@ const AuthLinks = () => {
         <>
             {session ? (
                 <>
-                    <Link href="/write" className={styles.link}>Write</Link>
-                    <span className={styles.link} onClick={handleLogout}>
-                        Logout
-                    </span>
+                    {session?.user?.role == "admin" && (
+                        <Link href="/upload" className={styles.link}>Upload</Link>
+                    )}
+                    <Dropdown signOut={handleLogout} />
                 </>
             ) : (
                 <Link href="/login" className={styles.link}>Login</Link>
@@ -46,7 +46,9 @@ const AuthLinks = () => {
 
                     {session ? (
                         <>
-                            <Link href="/write">Write</Link>
+                            {session?.user?.role == "admin" && (
+                                <Link href="/upload">Upload</Link>
+                            )}
                             <span className={styles.mobileLink} onClick={handleLogout}>
                                 Logout
                             </span>
@@ -54,6 +56,7 @@ const AuthLinks = () => {
                     ) : (
                         <Link href="/login">Login</Link>
                     )}
+
                 </div>
             )}
         </>

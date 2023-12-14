@@ -1,42 +1,12 @@
+import { Post as PostPrisma, Comment as CommentPrisma, User as UserPrisma } from "@prisma/client";
+
 export type Theme = "light" | "dark";
 
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-  image: string;
-};
+export type Post = PostPrisma;
 
-export type Category = {
-  id: string;
-  title: string;
-  slug: string;
-  color: string;
-};
+export type Comment = PostPrisma;
 
-export type Comment = {
-  id: string;
-  createdAt: Date;
-  desc: string;
-  userEmail: string;
-  user: User;
-  postSlug: string;
-};
-
-export type Post = {
-  id: string;
-  createdAt: Date;
-  slug: string;
-  title: string;
-  desc: string;
-  img: string;
-  views: number;
-  catSlug: string;
-  cat: Category;
-  userEmail?: string;
-  user?: User;
-  comments?: Comment[];
-};
+export type User = UserPrisma;
 
 export type PaginatedPostsResponse = {
   posts: Post[];
