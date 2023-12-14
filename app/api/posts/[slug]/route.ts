@@ -27,7 +27,14 @@ export const GET = async (
     const post = await db.post.update({
       where: { slug },
       data: { views: { increment: 1 } },
-      include: { user: true },
+      include: {
+        user: true,
+        comments: {
+          include: {
+            user: true,
+          },
+        },
+      },
     });
 
     return new Response(JSON.stringify(post));

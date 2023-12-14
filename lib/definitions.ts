@@ -1,8 +1,12 @@
-import { Post as PostC } from "@prisma/client";
+import { Post as PostPrisma, Comment as CommentPrisma, User as UserPrisma } from "@prisma/client";
 
 export type Theme = "light" | "dark";
 
-export type Post = PostC;
+export type Post = PostPrisma;
+
+export type Comment = PostPrisma;
+
+export type User = UserPrisma;
 
 export type PaginatedPostsResponse = {
   posts: Post[];
