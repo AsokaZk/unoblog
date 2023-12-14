@@ -24,7 +24,7 @@ const CardList = async ({ page, cat, limit }: CardListProps) => {
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>Recent Posts</h1>
+            <h1 className={styles.title}>Animes News</h1>
             <div className={styles.posts}>
                 {posts.map((post) => (
                     <Card post={post} key={post.id} />

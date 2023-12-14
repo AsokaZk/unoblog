@@ -63,7 +63,7 @@ const WritePage = () => {
         desc: data.description,
         img: URL,
         slug: slugify(data.title),
-        catSlug: catSlug || "no-ficcion", //If not selected, choose the general category
+        catSlug: catSlug || "action", //If not selected, choose the general category
       }),
     });
 
@@ -167,9 +167,9 @@ const WritePage = () => {
           </div>
 
           <div className={styles.editor}>
-            <input
+            <textarea
               {...register("description")}
-              className={styles.textArea}
+              className={`${styles.textArea}` + " resize-none md:resize rounded-md"}
               placeholder="Write here..."
             />
           </div>

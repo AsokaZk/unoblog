@@ -122,7 +122,7 @@ const SinglePage = ({ params: { slug } }: SinglePageProps) => {
             {post?.comments &&
               post.comments.map((comment: Comment) => (
                 <li key={comment.id}>
-                  <div className="flex">
+                  <div className="flex mt-3">
                     <div>
                       <Image
                         src={comment.user.image}
