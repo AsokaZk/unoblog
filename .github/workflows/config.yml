@@ -1,0 +1,15 @@
+name: Deploy Unoblog page
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    name: Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: |
+          echo "Installing dependencies..."
+          sleep 5s;
+          echo "Dependencies installed"
